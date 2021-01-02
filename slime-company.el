@@ -128,6 +128,14 @@ be active in derived modes as well."
   :group 'slime-company
   :type '(repeat symbol))
 
+(defcustom slime-company-backend-group
+  '(company-slime)
+  "List of company backends to be added to the top of
+`company-backends'. It should contain `company-slime' if it is a
+list."
+  :group 'slime-company
+  :type '(repeat symbol))
+
 (defun slime-company-just-one-space (completion-string)
   (unless (string-suffix-p ":" completion-string)
     (just-one-space)))
@@ -163,12 +171,12 @@ be active in derived modes as well."
 (defun slime-company-maybe-enable ()
   (when (slime-company-active-p)
     (company-mode 1)
-    (add-to-list 'company-backends 'company-slime)
+    (add-to-list 'company-backends slime-company-backend-group)
     (unless (slime-find-contrib 'slime-fuzzy)
       (setq slime-company-completion 'simple))))
 
 (defun slime-company-disable ()
-  (setq company-backends (remove 'company-slime company-backends)))
+  (setq company-backends (remove slime-company-backend-group company-backends)))
 
 ;;; ----------------------------------------------------------------------------
 ;;; * Internals
